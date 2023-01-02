@@ -42,18 +42,21 @@
         productCode: inputs[0].value,
         productName: inputs[1].value,
         price: inputs[2].value,
-        stock: inputs[3]
+        stock: inputs[3].value
         };
 
         $.ajax({
         async: false,
         type: "POST",
-        url: "/api/product",
-        data: JSON.strigify(product).
+        url: "/api/product/2",
+        data: JSON.stringify(product),
         dataType: "text",
-        success: response => {
+         success: response => {
           alert(response);
-          }
+        },
+        error: response => {
+          alert(response);
+        }
         });
       };
 

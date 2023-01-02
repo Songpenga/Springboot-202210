@@ -2,7 +2,7 @@ package com.study.springboot202210.locAndDi;
 
 import org.springframework.stereotype.Component;
 
-//@Component
+@Component("usi3")
 public class UserServiceImpl3 implements UserService{
 
     @Override

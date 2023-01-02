@@ -34,17 +34,22 @@ public class ProductTestController {
 
     @PostMapping("/api/product")
     public String registerProduct(Model model, ProductDto productDto) {
-        model.addAttribute("prodictDto", productDto);
+        model.addAttribute("productDto", productDto);
         System.out.println(productDto);
         return "product/product_view";
         //변수명, 파리미터값 주의
 
     }
 
+    @GetMapping("/product/addition2")
+    public String loadAddition2() {
+        return "product/product_add2";
+    }
+
     @ResponseBody
     @PostMapping("/api/product/2")
     public String registerProduct(@RequestBody ProductDto productDto){ //JSON필수 RequestBody
         System.out.println(productDto);
-        return productDto.toString();
+        return "텍스트 데이터 응답";
     }
 }
