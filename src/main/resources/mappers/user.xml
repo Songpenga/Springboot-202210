@@ -6,14 +6,15 @@
 
 <mapper namespace="com.study.springboot202210.repository.UserRepository">
     <insert id="saveUser" parameterType="com.study.springboot202210.web.dto.UserDto"
-    useGeneratedKeys="true" keyProperty="userId">
-        insert into category_mst
+            useGeneratedKeys="true" keyProperty="userId">
+        insert into
+            user_mst
         values
-        (0, #{username}, #{password}, #{name}, #{email})
+                (0, #{username}, #{password}, #{name}, #{email})
     </insert>
 
     <select id="findUserByUserId" parameterType="integer" resultType="com.study.springboot202210.web.dto.UserDto">
-    select
+        select
             user_id as userId,
             username,
             password,
@@ -24,7 +25,6 @@
         where
             user_id = #{userId}
     </select>
-
 
     <select id="findUserByUsername" parameterType="String"
             resultType="com.study.springboot202210.web.dto.UserDto">
@@ -38,6 +38,5 @@
             user_mst
         where
             username = #{username}
-
     </select>
 </mapper>

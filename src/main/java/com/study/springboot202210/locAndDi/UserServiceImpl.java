@@ -8,7 +8,6 @@ public class UserServiceImpl implements UserService{
         if (instance == null) {
             instance = new UserServiceImpl();
         }
-
         return instance;
     }
 

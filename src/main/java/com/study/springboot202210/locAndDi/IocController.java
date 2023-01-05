@@ -17,6 +17,7 @@ public class IocController {
     public IocController(UserServiceImpl2 userService) {
         this.userService = userService;
     }
+
     @ResponseBody
     @GetMapping("/ioc")
     public String iocTest(){

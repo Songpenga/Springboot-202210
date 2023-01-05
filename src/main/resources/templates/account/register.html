@@ -2,12 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scal=1.0">
-    <script src="https://code.jquery.com/jquery-latest.min.js"> </script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    
     <!-- 암기 -->
     <title>Title</title>
     <style>
-        *{
+        * {
             box-sizing: border-box;
             font-size: 14px;
         }
@@ -21,15 +23,14 @@
             border: 1px solid #dbdbdb;
             padding: 30px;
             width: 500px;
-
         }
 
-        .register-title{
+        .register-title {
             font-size: 25px;
             text-align: center;
         }
 
-        .register-inputs{
+        .register-inputs {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -38,7 +39,7 @@
             width: 80%;
         }
 
-        .register-text{
+        .register-text {
             text-align: center;
             margin-bottom: 5px;
             border: 1px solid #dbdbdb;
@@ -46,25 +47,25 @@
 
             padding: 10px;
             width: 100%;
-            
+
             cursor: pointer;
         }
 
-        .register-text:focus{
-            box-shadow:  0px 0px 10px 1px #dbdbdb;
+        .register-text:focus {
+            box-shadow: 0px 0px 10px 1px #dbdbdb;
         }
 
-        .success{
+        .success {
             border: 1px solid #00dd4d;
         }
 
-        .error-msg{
+        .error-msg {
             color: rgb(255, 73, 23);
             font-size: 11px;
         }
 
-        .register-button{
-            border:1px solid #dbdbdb;
+        .register-button {
+            border: 1px solid #dbdbdb;
             padding: 10px;
             width: 80%;
             background-color: black;
@@ -75,127 +76,159 @@
             cursor: pointer;
         }
 
-        .register-button:active{
+        .register-button:active {
             background-color: #303030;
             box-shadow: 0px 0px 10px 1px #dbdbdb;
         }
+
     </style>
 </head>
 <body>
-    <div id = "container">
+    <div id="container">
         <h1 class="register-title">회원가입</h1>
         <div class="register-inputs">
-            <input type="text" class="register-text" placeholder="사용자 이름">
+            <input type="text" class="register-text" placeholder="사용자이름">
             <div class="error-msg">
                 
             </div>
-        
+        </div>
         <div class="register-inputs">
             <input type="password" class="register-text" placeholder="비밀번호">
             <div class="error-msg">
-                
+
             </div>
         </div>
-        
         <div class="register-inputs">
-                <input type="text" class="register-text" placeholder="이름">
-                <div class="error-msg">
-                    
-                </div>
-        </div>
+            <input type="text" class="register-text" placeholder="이름">
+            <div class="error-msg">
 
+            </div>
+        </div>
         <div class="register-inputs">
             <input type="text" class="register-text" placeholder="이메일">
             <div class="error-msg">
-                
+
             </div>
         </div>
-
-        <button class="register-button"> 회원가입 </button>
+        <button class="register-button">회원가입</button>
     </div>
-    
-</div>
 
-<script>
-    class RegisterApi{
-        static #instance = null;
-        static getInsance(){
-            if(this.#instance == null){
-                this.#instance = new RegisterApi();
+    <script>
+        class RegisterApi {
+            static #instance = null;
+            static getInstance() {
+                if(this.#instance == null) {
+                    this.#instance = new RegisterApi();
+                }
+                return this.#instance;
             }
-            return this.#instance;
-        }
 
-    registerationUser(user){
-        const errorMsgs = document.querySelectorAll(".error-msg");
-        $.ajax({
-            async: false,
-            type: "post",
-            url: "/api/account/user",
-            contentType: "application/json",
-            data: JSON.stringify(user),
-            dataType: "json",
-            success: (Response) => {
-                console.log(response);
-                errorMsgs.forEach(errorMsg => {
-                    errorMsg.textContent = "";
-                });
-            },
-            error: (errorResponse) => {
+            registrationUser(user) {
+                const errorMsgs = document.querySelectorAll(".error-msg");
+                $.ajax({
+                    async: false,
+                    type: "post",
+                    url: "/api/account/user",
+                    contentType: "application/json",
+                    data: JSON.stringify(user),
+                    dataType: "json",
+                    success: (response) => {
+                        console.log(response);
+                        errorMsgs.forEach(errorMsg => {
+                            errorMsg.textContent = "";
+                        });
+                    },
+                    error: (errorResponse) => {
+                        console.log(errorResponse);
+                        const errorMap = errorResponse.responseJSON.data;
 
-                console.log(errorResponse);
-                const errorMap = errorResponse.responseJSON.data;
+                        errorMsgs.forEach(errorMsg => {
+                            errorMsg.textContent = "";
+                        });
+                        // 에러 메시지를 지움
 
-                errorMsgs.forEach(errorMsg => {
-                    errorMsg.textContent = "";
+
+                        Object.keys(errorMap).forEach(key => {
+                            if(key == "username") {
+                                errorMsgs[0].textContent = errorMap[key];
+                            }else if(key == "password") {
+                                errorMsgs[1].textContent = errorMap[key];
+                            }else if(key == "name") {
+                                errorMsgs[2].textContent = errorMap[key];
+                            }else if(key == "email") {
+                                errorMsgs[3].textContent = errorMap[key];
+                            }
+                        });
+                    }
                 });
             }
-        });
-    }
 
-    duplicateUsername(username){
-        $.ajax({
-            async: false,
-            type: "get",
-            url: "/api/account/username",
-            data: ({"username" : username}),
-            dataType: "json",
-            success: (response) => {    
-                usernameError.textContent="";
-                alert("사용 가능한 사용자 이름 입니다.")
-            },
-            error: (errorResponse) => {
+            duplicateUsername(username) {
+                const usernameInput = document.querySelectorAll(".register-text")[0];
                 const usernameError = document.querySelectorAll(".error-msg")[0];
-                usernameError.textContent = errorResponse.responseJSON.data.duplicate;
-            }
-        });
-    }
-}
 
-    class RegisterService{
-        static #insance = null;
-        static getInsance(){
-            if(this.#insance == null){
-                this.#insance = new registerService();
+                $.ajax({
+                    async: false,
+                    type: "get",
+                    url: "/api/account/username",
+                    data: {
+                        "username": username
+                    },
+                    dataType: "json",
+                    success: (response) => {
+                        usernameInput.classList.add("success");
+                        usernameError.textContent = "";
+                    },
+                    error: (errorResponse) => {
+                        console.log(errorResponse);
+                        usernameInput.classList.remove("success");
+                        usernameError.textContent = errorResponse.responseJSON.data.username;
+                    }
+                });
+
             }
-            return this.#insance;
         }
 
-        addEventToUsernameInput(){
-            const usernameInput = document.querySelectorAll(".register-text")[0];
-            usernameInput.onblur = () => {
-                alert("중복확인 요청");
-                
+
+        class RegisterService {
+            static #instance = null;
+            static getInstance() {
+                if(this.#instance == null) {
+                    this.#instance = new RegisterService();
+                }
+                return this.#instance;
             }
+
+            addEventToUsernameInput() {
+                const usernameInput = document.querySelectorAll(".register-text")[0];
+                usernameInput.onblur = () => {
+                    RegisterApi.getInstance().duplicateUsername(usernameInput.value);
+                }
+            }
+
+            addEventToRegisterButton() {
+                const registerButton = document.querySelector(".register-button");
+                registerButton.onclick = () => {
+                    const registerInputs = document.querySelectorAll(".register-text");
+                    const user = {
+                        username: registerInputs[0].value,
+                        password: registerInputs[1].value,
+                        name: registerInputs[2].value,
+                        email: registerInputs[3].value
+                    }
+                    RegisterApi.getInstance().registrationUser(user);
+                }
+            }
+
+
+        }
+
+        window.onload = () => {
+            RegisterService.getInstance().addEventToUsernameInput();
+            RegisterService.getInstance().addEventToRegisterButton();
         }
 
 
-    }
-
-    
-    window.onload = () =>{
-        RegisterService.getInsance().addEventToUsernameInput();
-    }
-</script>
+    </script>
 </body>
 </html> 
